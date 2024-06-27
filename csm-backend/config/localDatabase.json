@@ -1,0 +1,10 @@
+{
+    "DbURL": "mongodb+srv://bharatshaligram:1t8MKx3qC5O0D3TL@cms.v45d4lg.mongodb.net/localDatabase?retryWrites=true&w=majority&appName=CMS",
+    "portNumber": 3333,
+    "SecretKey": "LocalSecretKey",
+    "cloudName":"dkbl81mcm",
+    "API_KEY": "434711329537586",
+    "API_SECRET":"Wo8I7XPPCnOxcg3YetBD958VKRg",
+    "ADMIN_EMAIL": "bharat@gmail.com",
+    "ADMIN_PASSWORD":"12345"
+}

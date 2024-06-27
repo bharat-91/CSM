@@ -1,0 +1,31 @@
+// Assuming your variables are imported correctly, adjust as per your SCSS structure
+@import '../../scss/scssVariables.scss';
+
+// Navbar customization
+.navbar {
+    background-color: var(--primary-color); // Adjust this to your primary color
+    color: var(--color); // Adjust text color as per your theme
+    .navbar-brand {
+        color: var(--color); // Brand text color
+        font-weight: bold; // Optionally adjust font-weight
+        &.text-light {
+            color: var(--color); // Ensure text color matches your theme
+        }
+    }
+    .nav-item {
+        .nav-link {
+            color: var(--color); // Nav link text color
+            &.active {
+                color: var(--color); // Active link text color
+            }
+            &:hover {
+                color: var(--color); // Hover link text color
+            }
+        }
+    }
+    .navbar-toggler-icon {
+        // Custom styles for the navbar toggler icon if needed
+    }
+}
+
+// Additional customizations can be added based on your specific design requirements

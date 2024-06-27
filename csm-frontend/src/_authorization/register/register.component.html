@@ -1,0 +1,22 @@
+<section class="container">
+    <div class="login-container">
+        <div class="circle circle-one"></div>
+        <div class="form-container">
+            <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png"
+                alt="illustration" class="illustration" />
+            <h1 class="opacity">REGISTER</h1>
+            <form [formGroup]="registerForm">
+                <input type="text" placeholder="Username" formControlName="username" />
+                <input type="password" placeholder="Password" formControlName="password" />
+                <input type="email" placeholder="Email" formControlName="email" />
+                <textarea placeholder="Bio" formControlName="bio"></textarea>
+                <button class="opacity" (click)="successNotification()">SUBMIT</button>
+            </form>
+            <div class="register-forget opacity">
+                <a routerLink="">LOGIN</a>
+            </div>
+        </div>
+        <div class="circle circle-two"></div>
+    </div>
+    <div class="theme-btn-container"></div>
+</section>

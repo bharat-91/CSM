@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-md navbar-light bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand text-light m-0 p-0 d-flex justify-content-start">Content Management System</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId"
+            aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavId">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active text-light" [routerLink]="['/pages/user-profile']" routerLinkActive="router-link-active"
+                        aria-current="page">Profile
+                        <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" [routerLink]="['/pages/user-dashboard']">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" [routerLink]="['']">
+                        <button (click)="logout()" class="btn btn-danger">Logout</button>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
