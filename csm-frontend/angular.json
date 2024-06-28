@@ -33,7 +33,9 @@
               "src/styles.scss",
               "node_modules/sweetalert2/src/sweetalert2.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/quill/dist/quill.core.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -105,4 +107,5 @@
   "cli": {
     "analytics": false
   }
+  
 }

@@ -10,8 +10,18 @@ import { NavbarComponent } from '../_layout/navbar/navbar.component';
 import { UserProfileComponent } from './pages/user/user-profile/user-profile.component';
 import { DashboardComponent } from './pages/user/dashboard/dashboard.component';
 import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
-import { TokenInterceptor } from 'src/_core/service/interceptor/token.interceptor';
-
+import { TokenInterceptor } from 'src/_core/interceptor/token.interceptor';
+import { AgGridModule } from 'ag-grid-angular';
+import { QuillModule } from 'ngx-quill';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { SharedButtonRenderer } from 'src/shared/sharedButtons';
+import { EditFormComponent } from './pages/user/edit-form/edit-form.component';
+import { ViewcontentComponent } from './pages/user/viewcontent/viewcontent.component';
+import { SafePipe } from '../shared/pipe/dom-sanitizer.pipe';
+import { AllContentComponent } from './pages/user/all-content/all-content.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AgChartsAngular } from 'ag-charts-angular';
+import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,13 +29,25 @@ import { TokenInterceptor } from 'src/_core/service/interceptor/token.intercepto
     RegisterComponent,
     NavbarComponent,
     UserProfileComponent,
-    DashboardComponent
+    DashboardComponent,
+    SharedButtonRenderer,
+    EditFormComponent,
+    ViewcontentComponent,
+    SafePipe,
+    AllContentComponent,
+    AllContentComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgGridModule,
+    QuillModule,
+    AngularEditorModule,
+    AgChartsAngular,
+    BrowserAnimationsModule
   ],
   providers: [
     JwtHelperService,

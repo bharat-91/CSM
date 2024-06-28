@@ -1,44 +1,82 @@
 <app-navbar></app-navbar>
-
 <div class="container d-flex justify-content-center mt-5">
-
 	<div class="card">
-		
 		<div class="top-container">
-			
 			<img src="{{imageAddress}}" class="img-fluid profile-image" width="70">
-			
 			<div class="ml-3 ms-3">
 				<h5 class="name">{{username}}</h5>
 				<p class="mail">{{email}}</p>
 			</div>
 		</div>
-
-
-		<div class="middle-container d-flex justify-content-between align-items-center mt-3 p-2">
-				<div class="dollar-div px-3">
-					
-					<div class="round-div"><i class="fa fa-dollar dollar"></i></div>
-
+		<div class="middle-container d-flex justify-content-between align-items-center p-2 m-3">
+			<input type="file" placeholder="Please Upload file" (change)="onFileSelected($event)" accept="image">
+			<div class="d-flex flex-column text-right mr-2">
+				<button class="btn btn-outline-success" (click)="uploadProfilePic()">Upload Image</button>
 				</div>
-				<div class="d-flex flex-column text-right mr-2">
-					<!-- <span class="current-balance">Current Balance</span> -->
-                     <button class="btn btn-outline-success">Upload Image</button>
-					<!-- <span class="amount"><span class="dollar-sign">$</span>1476</span> -->
-				</div>
-
 		</div>
-
-		<div class="recent-border mt-4">
+		<div class="recent-borderq mt-4">
+			<h4>Bio:- </h4><br>
 			<span class="recent-orders">{{bio}}</span>
 		</div>
-		<div class="wishlist-border pt-2">
-			<span class="wishlist">Wishlist</span>
+		<div class="btnContainer d-flex w-100 justify-content-between">
+			<button class="btn btn-outline-secondary mt-2" data-bs-toggle="modal" data-bs-target="#modalId">Edit
+				Details</button>
+			<!-- <button type="button" class="btn btn-outline-danger mt-2" (click)="logout()" data-bs-dismiss="modal">Logout</button> -->
 		</div>
-		<div class="fashion-studio-border pt-2">
-			<span class="fashion-studio">Fashion studio</span>
-		</div>
-		
-	</div>
-	
+			</div>
+	<div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+		aria-labelledby="modalTitleId" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalTitleId">
+						Edit Details
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form [formGroup]="editDetailsForm">
+
+						<div class="row justify-content-center align-items-center">
+							<div class="col-md-6">
+								<div class="inputContainer">
+									<label for="username">Username</label>
+									<input type="text" name="username" id="username" formControlName="username" class="form-control"
+										value="{{username}}" required>
+									<!-- <div *ngIf="editDetailsForm.controls['username'].invalid && (editDetailsForm.controls['username'].dirty || editDetailsForm.controls['username'].touched)"
+										class="alert alert-danger">
+										<div *ngIf="editDetailsForm.controls['username'].errors?.['required']">
+											Name is required.
+										</div>
+									</div> -->
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="inputContainer">
+									<label for="email">email</label>
+									<input type="text" name="email" id="email" formControlName="email" class="form-control" value="{{email}}"
+										required>
+								</div>
+							</div>
+						</div>
+						<div class="row justify-content-center align-items-center mt-2">
+							<div class="col-md-12">
+								<div class="inputContainer">
+									<label for="bio">bio</label>
+									<textarea type="text" name="bio" id="bio" formControlName="bio" class="form-control" value="{{bio}}"
+										required></textarea>
+								</div>
+							</div>
+						</div>
+						</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+								Close
+							</button>
+							<button type="button" class="btn btn-primary" (click)="editDetails()" data-bs-dismiss="modal">Save</button>
+						</div>
+						</div>
+						</div>
+						</div>
 </div>

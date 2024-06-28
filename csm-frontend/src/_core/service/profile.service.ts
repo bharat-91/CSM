@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { catchError, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class ProfileService {
 
   constructor(private http:HttpClient) { }
   private jwtHelper = new JwtHelperService()
-
+  private isEdited : any = new Subject<any>();
   private BASE_URL = 'http://localhost:3333/auth/user'
   getProfileData():Observable<any>{
     const token = localStorage.getItem('jwt_token');
@@ -71,5 +71,39 @@ export class ProfileService {
     }
     let API_URL = `${this.BASE_URL}/uploadImage/${userId}`
     return this.http.post(API_URL, profilePic)
+  }
+
+  editUserDetails(editData:any): any{
+    const token = localStorage.getItem('jwt_token');
+
+    if (!token) {
+      return new Observable(observer => {
+        observer.error('No token found in local storage');
+        observer.complete();
+      });
+    }
+
+    let userId;
+    
+    try {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      userId = decodedToken._id
+
+      if (!userId) {
+        throw new Error('User ID not found in token');
+      }
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return new Observable(observer => {
+        observer.error('Unable to extract user ID from token');
+        observer.complete();
+      });
+    }
+    let API_URL = `${this.BASE_URL}/updateUserProfile/${userId}`
+    return this.http.put(API_URL,editData).pipe(
+      finalize(()=>{
+        this.isEdited.next();
+        })
+    );
   }
 }

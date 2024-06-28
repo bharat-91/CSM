@@ -20,4 +20,9 @@ export class TokenService {
   public removeToken(key:string): void {
     localStorage.removeItem(key);
   }
+
+  checkAuthentication(): boolean {
+    const token = this.getToken();
+    return !!token;
+ }
 }

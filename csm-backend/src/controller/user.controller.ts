@@ -189,17 +189,17 @@ export class userController {
     async getUserProfile(@request() req: any, @response() res: Response) {
         try {
             const { userId } = req.params;
-            // const authenticatedUserId = req.user._id;
-            // console.log(req.permission);
-            // if (userId !== authenticatedUserId.toString()) {
-            //     return res.status(statusCode.UNAUTHORIZED.code).json({
-            //         message: 'Unauthorized',
-            //         response: responseStatus.FAILED,
-            //         details: 'You are not authorized to view this profile'
-            //     });
-            // }
+            const authenticatedUserId = req.user._id;
             console.log(req.permission);
-            if(req.permission.selfRead){
+            if (userId !== authenticatedUserId.toString()) {
+                return res.status(statusCode.UNAUTHORIZED.code).json({
+                    message: 'Unauthorized',
+                    response: responseStatus.FAILED,
+                    details: 'You are not authorized to view this profile'
+                });
+            }
+            // console.log(req.permission);
+            // if(req.permission.selfRead){
                 console.log(req.permission.roleName);
                 
 
@@ -218,9 +218,11 @@ export class userController {
                     details: searchedUser,
                     response: responseStatus.SUCCESS
                 });
-            }
+            // }
 
         } catch (error: any) {
+            console.log(error);
+
             const message = errorObj.getErrorMsg(error) || error.message;
             res.status(statusCode.INTERNAL_SERVER_ERROR.code).json({
                 message: statusCode.INTERNAL_SERVER_ERROR.message,
@@ -233,15 +235,7 @@ export class userController {
     @httpPut('/updateUserProfile/:userId', isLoggedInMiddleware, TYPES.PermissionMiddleware)
     async updateUserProfile(@request() req: any, @response() res: Response): Promise<void> {
         try {
-            // const authenticatedUserId = req.user._id;
-            // if (userId !== authenticatedUserId.toString()) {
-                //     res.status(statusCode.UNAUTHORIZED.code).json({
-                    //         message: 'Unauthorized',
-                    //         response: responseStatus.FAILED,
-                    //         details: 'You are not authorized to update this profile'
-                    //     });
-                    //     return
-                    // }
+
                     const { userId } = req.params;
             if(req.permission.update){
 
@@ -264,5 +258,23 @@ export class userController {
     }
 
 
-    //todo get post by id and all post of that user
+    @httpGet('/getUserContent/:userId')
+    async getUserContent(@request() req: Request, @response() res: Response): Promise<void> {
+        try {
+            const { userId } = req.params
+            const media = await Media.find({ userId })
+            res.status(statusCode.SUCCESS.code).json({
+                message: statusCode.SUCCESS.message,
+                details: media,
+                response: responseStatus.SUCCESS
+            });
+        } catch (error: any) {
+            const message = errorObj.getErrorMsg(error) || error.message;
+            res.status(statusCode.INTERNAL_SERVER_ERROR.code).json({
+                message: statusCode.INTERNAL_SERVER_ERROR.message,
+                response: responseStatus.FAILED,
+                details: message
+            });
+        }
+    }
 }

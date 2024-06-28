@@ -19,18 +19,35 @@ export class LoginComponent {
     password:[null, [Validators.required, Validators.min(3)]]
   })
 
-  login(){
-    if(this.loginForm.invalid){
-      Swal.fire("Please fill the form Correctly")
+  login() {
+    if (this.loginForm.invalid) {
+      Swal.fire("Please fill the form correctly");
+      return; 
     }
-    this.authService.login(this.loginForm.value).subscribe(
-      (res:any) =>{
-          if(res.response === true){
-            this.token.setToken(res.data.token)
-            this.router.navigateByUrl('/pages/user-profile')
-          Swal.fire('Done', 'User Logged in!', 'success');
+  
+    const email: string = this.loginForm.value.email!;
+    const password: string = this.loginForm.value.password!;
+    if (email === 'bharat@gmail.com' && password === '12345') {
+      this.authService.login(this.loginForm.value).subscribe(
+        (res: any) => {
+          if (res.response === true) {
+            this.token.setToken(res.data.token);
+            this.router.navigateByUrl('/pages/adminRoutes');
+            Swal.fire('Done', 'Admin logged in!', 'success');
           }
-      }
-    )
+        }
+      );
+    } else {
+      this.authService.login(this.loginForm.value).subscribe(
+        (res: any) => {
+          if (res.response === true) {
+            this.token.setToken(res.data.token);
+            this.router.navigateByUrl('/pages/user-profile');
+            Swal.fire('Done', 'User logged in!', 'success');
+          }
+        }
+      );
+    }
   }
+  
 }

@@ -1,5 +1,5 @@
 import { inject } from "inversify";
-import { controller, httpDelete, httpPost, httpPut, request, response } from "inversify-express-utils";
+import { controller, httpDelete, httpGet, httpPost, httpPut, request, response } from "inversify-express-utils";
 import { mediaService } from "../service";
 import { TYPES } from "../types/types";
 import { Request, Response } from "express";
@@ -20,8 +20,48 @@ export class mediaController {
     constructor(@inject<mediaService>(TYPES.mediaService) private media: mediaService) { }
 
 
+    @httpGet('/getAllContent')
+    async getMediaContent(@request() req: Request, @response() res: Response): Promise<void> {
+        try {
+            const media = await Media.find()
+
+            res.status(statusCode.CREATED.code).json({
+                response: responseStatus.SUCCESS,
+                details: statusCode.CREATED.message,
+                data: media
+            });
+        } catch (error:any) {
+            const message = errorObj.getErrorMsg(error) || error.message;
+            res.status(statusCode.INTERNAL_SERVER_ERROR.code).json({
+                message: statusCode.INTERNAL_SERVER_ERROR.message,
+                response: responseStatus.FAILED,
+                details: message
+            });
+        }
+    }
+    @httpGet('/getContent/:mediaId')
+    async getMediaContentById(@request() req: Request, @response() res: Response): Promise<void> {
+        try {
+            const {mediaId} = req.params
+            const media = await Media.findById({_id: mediaId})
+
+            res.status(statusCode.CREATED.code).json({
+                response: responseStatus.SUCCESS,
+                details: statusCode.CREATED.message,
+                data: media
+            });
+        } catch (error:any) {
+            const message = errorObj.getErrorMsg(error) || error.message;
+            res.status(statusCode.INTERNAL_SERVER_ERROR.code).json({
+                message: statusCode.INTERNAL_SERVER_ERROR.message,
+                response: responseStatus.FAILED,
+                details: message
+            });
+        }
+    }
+
     @httpPost('/upload/:userId', isLoggedInMiddleware, upload.single('content'))
-    async uploadMedia(@request() req: any, @response() res: Response): Promise<void> {
+    async uploadMedia(@request() req: Request, @response() res: Response): Promise<void> {
         try {
 
             let mediaData: IMedia;
@@ -55,14 +95,10 @@ export class mediaController {
             if (req.file) {
                 mediaData.contentPath = await handleCloudinaryUpload(req.file);
                 mediaData.filename = req.file.originalname;
-            } else {
-                mediaData.contentPath = '  ';
-            }
-            console.log(req.file);
-            
-            console.log(mediaData);
-            
+                mediaData.fileType = req.file.mimetype
+            } 
             const mediaCreated = await this.media.uploadMedia(mediaData);
+            
 
             res.status(statusCode.CREATED.code).json({
                 response: responseStatus.SUCCESS,
@@ -108,6 +144,7 @@ export class mediaController {
             if (req.file) {
                 mediaData.contentPath = await handleCloudinaryUpload(req.file);
                 mediaData.filename = req.file.originalname;
+                mediaData.fileType = req.file.mimetype
             }
             console.log(mediaData, req.file);
             const updatedMedia = await Media.findByIdAndUpdate({ _id: mediaId }, mediaData)

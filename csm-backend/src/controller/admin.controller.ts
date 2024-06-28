@@ -79,7 +79,7 @@ export class adminController{
                 return;
             }
             res.status(200).json({
-                response: 'SUCCESS',
+                response: responseStatus.SUCCESS,
                 details: 'Logged in successfully',
                 data: loggedInUser
             });

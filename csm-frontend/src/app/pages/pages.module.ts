@@ -2,18 +2,21 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PagesRoutingModule } from './pages-routing.module';
-import { UserProfileComponent } from './user/user-profile/user-profile.component';
-import { DashboardComponent } from './user/dashboard/dashboard.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from 'src/_layout/navbar/navbar.component';
+import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { AgChartsAngular } from 'ag-charts-angular';
+import { AgGridModule } from 'ag-grid-angular';
 
 
 @NgModule({
   declarations: [
-    DashboardComponent,
+  
   ],
   imports: [
     CommonModule,
-    PagesRoutingModule
+    PagesRoutingModule,
+    AgChartsAngular
   ]
 })
 export class PagesModule { }

@@ -40,9 +40,9 @@ export const mediaSchema = new mongoose.Schema<IMedia>({
     filename:{
         type:String,
     },
-    contentType:{
+    fileType:{
         type:String,
-        trim:true
+        default:""
     }
 })
 

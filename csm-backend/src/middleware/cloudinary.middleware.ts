@@ -12,6 +12,9 @@ export async function handleCloudinaryUpload(file: any) {
     const res = await cloudinary.uploader.upload(file.path, {
       resource_type: 'auto'
     });
+//     console.log(res.secure_url);
+// res.secure_url = res.secure_url.replace(".pdf", ".jpg");
+// console.log(res.secure_url); 
     return res.secure_url;
   } catch (error) {
     console.error('Error uploading to Cloudinary:', error);
