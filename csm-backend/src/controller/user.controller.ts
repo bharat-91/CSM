@@ -14,7 +14,6 @@ import config from 'config';
 import { Media, User } from "../models";
 import { isLoggedInMiddleware } from "../middleware/authorization.middleware";
 import { moduleType } from "../utils/moduleSetter";
-import { permission } from 'process';
 import { Role } from "../models/roleModel";
 import mongoose from "mongoose";
 
@@ -129,9 +128,12 @@ export class userController {
                 console.log(`Reset token for user: ${user.email}`);
             }
 
+            let roleName = await Role.findById({_id: user.role})
             
 
-            const token = jwt.sign({ _id: user._id , role: user.role}, config.get("SecretKey"));
+            
+
+            const token = jwt.sign({ _id: user._id , role: user.role, roleName: roleName?.role}, config.get("SecretKey"));
 
             const loggedInUser = await User.findOneAndUpdate(
                 { email },
@@ -236,7 +238,10 @@ export class userController {
     async updateUserProfile(@request() req: any, @response() res: Response): Promise<void> {
         try {
 
-                    const { userId } = req.params;
+               
+            const { userId } = req.params;
+            console.log("Permission", req.permission.update);
+            
             if(req.permission.update){
 
                 const dataToUpdate = req.body

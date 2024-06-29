@@ -9,7 +9,7 @@
       </ng-container>
 
       <ng-container *ngIf="media.fileType === 'application/pdf'">
-        <object [data]="media.contentPath" type="application/pdf" width="100%" height="140px">
+        <object [data]="media.contentPath | safe" type="application/pdf" width="100%" height="140px">
           <p>Your browser does not support PDFs. <a [href]="media.contentPath | safe">Download the PDF</a> instead.</p>
         </object>
       </ng-container>
@@ -31,6 +31,7 @@
         <span class="file-type">File Type: </span> {{ media.fileType }}
       </div>
       <p class="file-source">File Source: <a [href]="media.contentPath" target="_blank">Download {{ media.fileType }}</a></p>
+      <button class="btn btn-primary" (click)="onViewClicked(media._id)">View Content</button>
     </div>
   </div>
 </div>

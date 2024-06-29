@@ -9,7 +9,7 @@
 			</div>
 		</div>
 		<div class="middle-container d-flex justify-content-between align-items-center p-2 m-3">
-			<input type="file" placeholder="Please Upload file" (change)="onFileSelected($event)" accept="image">
+			<input type="file" (change)="onFileSelected($event)" accept="image/*">
 			<div class="d-flex flex-column text-right mr-2">
 				<button class="btn btn-outline-success" (click)="uploadProfilePic()">Upload Image</button>
 				</div>
@@ -80,3 +80,7 @@
 						</div>
 						</div>
 </div>
+
+<div *ngIf="loading" class="loading-screen">
+	<p>Uploading Profile Photo Please Wait.......</p>
+  </div>

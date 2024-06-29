@@ -25,4 +25,7 @@ export class TokenService {
     const token = this.getToken();
     return !!token;
  }
+
+
+
 }

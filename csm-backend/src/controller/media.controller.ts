@@ -11,10 +11,11 @@ import { isAdmin, isLoggedInMiddleware } from "../middleware/authorization.middl
 import mongoose, { Types } from "mongoose";
 import { handleCloudinaryUpload } from "../middleware/cloudinary.middleware";
 import { Media, User } from "../models";
+import { moduleType } from "../utils/moduleSetter";
 
 
 const errorObj = new ErrorHandling()
-@controller('/media')
+@controller('/media',moduleType("Media"))
 
 export class mediaController {
     constructor(@inject<mediaService>(TYPES.mediaService) private media: mediaService) { }
@@ -45,9 +46,12 @@ export class mediaController {
             const {mediaId} = req.params
             const media = await Media.findById({_id: mediaId})
 
+            const getAuthorName = media?.userId
+            let authorName = await User.findById({_id: getAuthorName})
             res.status(statusCode.CREATED.code).json({
                 response: responseStatus.SUCCESS,
                 details: statusCode.CREATED.message,
+                authorName:authorName?.username,
                 data: media
             });
         } catch (error:any) {
@@ -204,36 +208,43 @@ export class mediaController {
         }
     }
 
-    @httpDelete('/deleteContent/:userId/:mediaId', isLoggedInMiddleware)
+    @httpDelete('/deleteContent/:userId/:mediaId', isLoggedInMiddleware, TYPES.PermissionMiddleware)
     async deleteContent(@request() req: any, @response() res: Response): Promise<void> {
         try {
-            const authenticatedUserId = req.user._id;
+            // const authenticatedUserId = req.user._id;
             const { userId, mediaId } = req.params
-            if (userId !== authenticatedUserId.toString()) {
-                res.status(statusCode.UNAUTHORIZED.code).json({
-                    message: 'Unauthorized',
-                    response: responseStatus.FAILED,
-                    details: 'You are not authorized to update this Content'
+            // const isAdmin = req.user.roleName === 'Admin'
+            // if (userId !== authenticatedUserId.toString() || !isAdmin) {
+            //     res.status(statusCode.UNAUTHORIZED.code).json({
+            //         message: 'Unauthorized',
+            //         response: responseStatus.FAILED,
+            //         details: 'You are not authorized to update this Content'
+            //     });
+            //     return
+            // }
+            // console.log(req.permission);
+            // console.log("Permission", req.permission.update);
+            
+            // if(req.permission.update){
+                const user = await User.findById({ _id: userId })
+                if (!user) {
+                    res.status(404).json("User not Found")
+                }
+                const media = await Media.findById({ _id: mediaId })
+    
+                if (!media) {
+                    res.status(404).json("Media not Found")
+                }
+    
+                const deleteMedia = await Media.findByIdAndDelete({ _id: mediaId })
+                res.status(statusCode.SUCCESS.code).json({
+                    message: statusCode.SUCCESS.message,
+                    details: deleteMedia,
+                    response: responseStatus.SUCCESS
                 });
-                return
-            }
-            const user = await User.findById({ _id: userId })
-            if (!user) {
-                res.status(404).json("User not Found")
-            }
-            const media = await Media.findById({ _id: mediaId })
-
-            if (!media) {
-                res.status(404).json("Media not Found")
-            }
-
-            const deleteMedia = await Media.findByIdAndDelete({ _id: mediaId })
-            res.status(statusCode.SUCCESS.code).json({
-                message: statusCode.SUCCESS.message,
-                details: deleteMedia,
-                response: responseStatus.SUCCESS
-            });
-        } catch (error: any) {
+            // }
+        } catch (error: any) {console.log(error);
+        
             const message = errorObj.getErrorMsg(error) || error.message;
             res.status(statusCode.INTERNAL_SERVER_ERROR.code).json({
                 message: statusCode.INTERNAL_SERVER_ERROR.message,

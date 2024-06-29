@@ -12,7 +12,11 @@ export class MediaService {
 
   private BASE_URL = 'http://localhost:3333/media'
   private userId: string = ''
+  private userRole: string = ''
   getMediaData(mediaId: any): Observable<any> {
+    this.tokenRetriverService.getUserId().subscribe(userRole => {
+      this.userRole = userRole
+    })
     const API_URL = `${this.BASE_URL}/getContent/${mediaId}`
     return this.http.get(API_URL)
   }

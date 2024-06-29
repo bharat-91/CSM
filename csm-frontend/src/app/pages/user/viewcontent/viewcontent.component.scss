@@ -1,90 +1,98 @@
 /* Reset default styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Article container */
+.article-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+/* Article */
+.article {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 800px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  transform: translateY(50px);
+  opacity: 0;
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: 0.3s;
+}
+
+/* Article title */
+.article-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Article content */
+.article-content {
+  margin-top: 20px;
+}
+
+/* Article image */
+.article-content img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.article-content img:hover {
+  transform: scale(1.05);
+}
+
+/* Article description */
+.article-description {
+  line-height: 1.6;
+  color: #555;
+  margin-top: 15px;
+}
+
+/* File info */
+.file-info {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #777;
+}
+
+.file-type {
+  font-weight: bold;
+  color: #333;
+}
+
+.file-source {
+  margin-top: 10px;
+}
+
+.file-source a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.file-source a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+@keyframes slideIn {
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
-  
-  /* Article container */
-  .article {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 600px;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    transform: translateY(50px);
-    opacity: 0;
-    animation: slideIn 0.5s ease forwards;
-    animation-delay: 0.3s;
-  }
-  
-  /* Article title */
-  .article-title {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  /* Article content */
-  .article-content {
-    margin-top: 20px;
-  }
-  
-  /* Article image */
-  .article-content img {
-    max-width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-  }
-  
-  .article-content img:hover {
-    transform: scale(1.1);
-  }
-  
-  /* Article description */
-  .article-description {
-    line-height: 1.6;
-    color: #555;
-    margin-top: 15px;
-  }
-  
-  /* File info */
-  .file-info {
-    margin-top: 15px;
-    font-size: 16px;
-    color: #777;
-  }
-  
-  .file-type {
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .file-source {
-    margin-top: 10px;
-  }
-  
-  .file-source a {
-    color: #007bff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .file-source a:hover {
-    text-decoration: underline;
-    color: #0056b3;
-  }
-  
-  /* Animation */
-  @keyframes slideIn {
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  
+}

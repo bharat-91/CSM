@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent {
   frameworkComponents: any;
+  loading:boolean = false
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -120,6 +121,7 @@ export class DashboardComponent {
     this.uploadContent();
   }
   async uploadContent() {
+    this.loading = true
     const formData = new FormData();
     formData.append('title', this.uploadContentForm.value.title || '');
     formData.append('description', this.uploadContentForm.value.description || '');
@@ -130,6 +132,7 @@ export class DashboardComponent {
   
     this.dashboardService.uploadContent(formData).subscribe(
       (res: any) => {
+        this.loading= false
         if (res.response === true) {
           Swal.fire("Done", "Content Uploaded", "success");
           this.rowData = [...this.rowData, res.data];
@@ -139,6 +142,7 @@ export class DashboardComponent {
         }
       },
       (err: any) => {
+        this.loading= false
         console.error(err);
         Swal.fire('Error', 'An unknown error occurred. Please try again.', 'error');
       }

@@ -1,33 +1,42 @@
 <app-navbar></app-navbar>
 
-<div class="article">
-  <h1 class="article-title">{{ title }}</h1>
-  <div class="article-content">
-    <ng-container *ngIf="fileType === 'video/mp4'">
-      <iframe width="560" height="315" [src]="imageUrl | safe" frameborder="0" allowfullscreen></iframe>
-    </ng-container>
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">{{ title }}</h1>
+    <div class="article-content">
+      <ng-container *ngIf="fileType === 'video/mp4'">
+        <iframe width="560" height="315" [src]="imageUrl | safe" frameborder="0" allowfullscreen></iframe>
+      </ng-container>
 
-    <ng-container *ngIf="fileType === 'application/pdf'">
-      <object [data]="imageUrl | safe" type="application/pdf" width="100%" height="600px">
-        <p>Your browser does not support PDFs. <a [href]="imageUrl | safe">Download the PDF</a> instead.</p>
-      </object>
-    </ng-container>
+      <ng-container *ngIf="fileType === 'application/pdf'">
+        <object [data]="imageUrl | safe" type="application/pdf" width="100%" height="600px">
+          <p>Your browser does not support PDFs. <a [href]="imageUrl | safe">Download the PDF</a> instead.</p>
+        </object>
+      </ng-container>
 
-    <ng-container *ngIf="fileType.startsWith('image/')">
-      <img [src]="imageUrl | safe" alt="Article Image">
-    </ng-container>
+      <ng-container *ngIf="fileType.startsWith('image/')">
+        <img [src]="imageUrl | safe" alt="Article Image">
+      </ng-container>
 
-    <ng-container *ngIf="fileType.startsWith('audio/')">
-      <audio controls>
-        <source [src]="imageUrl">
-        Your browser does not support the audio element.
-      </audio>
-    </ng-container>
+      <ng-container *ngIf="fileType.startsWith('audio/')">
+        <audio controls>
+          <source [src]="imageUrl">
+          Your browser does not support the audio element.
+        </audio>
+      </ng-container>
 
-    <p class="article-description">{{ desc }}</p>
-    <div class="file-info">
-      <span class="file-type">File Type: </span> {{ fileType }}
+      <p class="article-description">{{ desc }}</p>
+      <div class="file-info">
+        <span class="file-type">File Type: </span> {{ fileType }}
+      </div>
+      <p class="file-source">File Source: <a [href]="imageUrl" target="_blank">Download {{ fileType }}</a></p>
+
+      <div class="author-info d-flex right">
+        <p class="text-right text-muted">~{{ author }}</p>
+      </div>
+      <div class="btnContainer d-flex justify-content-center">
+        <button *ngIf="isAdmin" (click)="onDelete()" class="btn btn-outline-danger p-2 " >Delete</button>
+      </div>
     </div>
-    <p class="file-source">File Source: <a [href]="imageUrl" target="_blank">Download {{ fileType }}</a></p>
   </div>
 </div>

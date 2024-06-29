@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MediaService } from 'src/_core/service/media.service';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-content',
@@ -9,8 +9,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./all-content.component.scss']
 })
 export class AllContentComponent {
+  isLoading = false;
   mediaList: any[] = [];
-constructor(private mediaService:MediaService, private activeRouter:ActivatedRoute){}
+constructor(private mediaService:MediaService, private activeRouter:ActivatedRoute, private router:Router){}
 
 ngOnInit(){
   this.fetchMediaData()
@@ -34,6 +35,8 @@ fetchMediaData(): void {
         Swal.fire('Error', errorMessage, 'error');
       }
     );
-  
+}
+onViewClicked(mediaId: string) {
+  this.router.navigate(['/pages/view-content', mediaId]);
 }
 }
