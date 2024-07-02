@@ -12,9 +12,10 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 })
 export class EditFormComponent implements OnInit {
   fileName = '';
+  isLoading: boolean = false;
   imageURL: string = '';
   mediaId: string | null = null;
-  selectedFile!: File
+  selectedFile!: File;
   editContentForm: FormGroup;
 
   constructor(
@@ -39,7 +40,7 @@ export class EditFormComponent implements OnInit {
     if (this.mediaId) {
       this.mediaService.getMediaData(this.mediaId).subscribe(
         (res: any) => {
-          if (res.response === true) {
+          if (res.response) {
             this.imageURL = res.data.contentPath;
             this.editContentForm.patchValue({
               title: res.data.title,
@@ -67,28 +68,20 @@ export class EditFormComponent implements OnInit {
         this.imageURL = reader.result as string;
       };
       reader.readAsDataURL(file);
-      this.editContentForm.patchValue({
-        content: file || this.imageURL  // This line might cause issues
-      });
     } else {
       this.imageURL = '';
       this.fileName = '';
-      this.editContentForm.patchValue({
-        content: ''  // Reset content if no file selected
-      });
     }
   }
-  
 
-  onFileSelected(event: any) {
+  onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
     if (this.selectedFile) {
       this.fileName = this.selectedFile.name;
-      // Optionally, you might want to call showPreview here if needed
       this.showPreview(event);
     }
   }
-  
+
   config: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -100,48 +93,53 @@ export class EditFormComponent implements OnInit {
     defaultFontName: 'Arial',
   };
 
-
   updateData(): void {
     if (this.mediaId) {
-
+      this.isLoading = true;
       this.mediaService.updateMediaDesc(this.mediaId, this.editContentForm.value).subscribe(
         (res: any) => {
-          if (res.response === true) {
+          this.isLoading = false;
+          if (res.response) {
             Swal.fire('Success', 'Content updated successfully', 'success');
-            this.router.navigateByUrl('/pages/user-dashboard')
+            this.router.navigateByUrl('/pages/user-dashboard');
           } else {
             Swal.fire('Error', 'Failed to update content', 'error');
           }
         },
         (err: any) => {
+          this.isLoading = false;
           console.error(err);
           const errorMessage = err.error.message || 'An unknown error occurred. Please try again.';
           Swal.fire('Error', errorMessage, 'error');
         }
       );
     } else {
-      Swal.fire('Error', "Something went wrong", 'error');
+      Swal.fire('Error', 'Something went wrong', 'error');
     }
   }
 
   updateImage(): void {
-    let formData: FormData = new FormData()
+    this.isLoading = true;
+    const formData: FormData = new FormData();
     if (this.selectedFile) {
       formData.append('content', this.selectedFile);
     }
-    this.mediaService.updateImage(this.mediaId, formData).subscribe((res: any) => {
-      if (res.response === true) {
-        Swal.fire('Success', 'Content updated successfully', 'success');
-        this.router.navigateByUrl('/pages/user-dashboard')
-      } else {
-        Swal.fire('Error', 'Failed to update content', 'error');
+    this.mediaService.updateImage(this.mediaId, formData).subscribe(
+      (res: any) => {
+        this.isLoading = false;
+        if (res.response) {
+          Swal.fire('Success', 'Content updated successfully', 'success');
+          this.router.navigateByUrl('/pages/user-dashboard');
+        } else {
+          Swal.fire('Error', 'Failed to update content', 'error');
+        }
+      },
+      (err: any) => {
+        this.isLoading = false;
+        console.error(err);
+        const errorMessage = err.error.message || 'An unknown error occurred. Please try again.';
+        Swal.fire('Error', errorMessage, 'error');
       }
-    }, (err: any) => {
-      console.error(err);
-      const errorMessage = err.error.message || 'An unknown error occurred. Please try again.';
-      Swal.fire('Error', errorMessage, 'error');
-    }
-    )
+    );
   }
-
 }

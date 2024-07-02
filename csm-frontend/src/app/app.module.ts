@@ -19,9 +19,12 @@ import { EditFormComponent } from './pages/user/edit-form/edit-form.component';
 import { ViewcontentComponent } from './pages/user/viewcontent/viewcontent.component';
 import { SafePipe } from '../shared/pipe/dom-sanitizer.pipe';
 import { AllContentComponent } from './pages/user/all-content/all-content.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgChartsAngular } from 'ag-charts-angular';
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import * as ApexCharts from 'apexcharts';
+import { NgxApexchartsModule } from 'ngx-apexcharts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +50,8 @@ import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-das
     QuillModule,
     AngularEditorModule,
     AgChartsAngular,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxApexchartsModule
   ],
   providers: [
     JwtHelperService,

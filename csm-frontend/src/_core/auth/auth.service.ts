@@ -72,4 +72,19 @@ export class AuthService {
 
   }
 
+
+  getRoleName(): string | null {
+    const token = localStorage.getItem('jwt_token');
+
+    if (!token) {
+      new Observable(observer => {
+        observer.error('No token found in local storage');
+        observer.complete();
+      });
+      return token
+    }
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    return decodedToken ? decodedToken.roleName : null;
+  }
+
 }

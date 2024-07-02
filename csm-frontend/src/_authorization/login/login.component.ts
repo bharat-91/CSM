@@ -32,7 +32,7 @@ export class LoginComponent {
         (res: any) => {
           if (res.response === true) {
             this.token.setToken(res.data.token);
-            this.router.navigateByUrl('/pages/adminRoutes');
+            this.router.navigateByUrl('/pages/admin-analytics');
             Swal.fire('Done', 'Admin logged in!', 'success');
           }
         }

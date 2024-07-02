@@ -65,9 +65,11 @@ export class ViewcontentComponent implements OnInit {
     if (this.mediaId) {
       this.dashboardService.deleteContent(this.mediaId).subscribe(
         (res: any) => {
-          if (res.success == true) {
-            Swal.fire('Deleted!', 'Media content deleted successfully.', 'success');
-            this.router.navigate(['']);
+          if (res.success === true) {
+            console.log("DElete response=>",res);
+            Swal.fire('Deleted!', 'Media content deleted successfully.', 'success').then(() => {
+              this.router.navigate(['']);
+            });
           } else {
             Swal.fire('Error', 'Failed to delete media content', 'error');
           }
@@ -80,4 +82,5 @@ export class ViewcontentComponent implements OnInit {
       );
     }
   }
+  
 }

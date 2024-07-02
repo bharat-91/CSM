@@ -6,6 +6,7 @@ import { EditFormComponent } from './user/edit-form/edit-form.component';
 import { ViewcontentComponent } from './user/viewcontent/viewcontent.component';
 import { AllContentComponent } from './user/all-content/all-content.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { AdminGuard } from 'src/_core/guard/admin-guard.guard';
 
 const routes: Routes = [
   {path:'user-profile', component:UserProfileComponent},
@@ -13,7 +14,7 @@ const routes: Routes = [
   { path: 'edit-content/:id', component: EditFormComponent },
   { path: 'view-content/:id', component: ViewcontentComponent },
   { path: 'view-all-content', component: AllContentComponent },
-  { path: 'adminRoutes', component: AdminDashboardComponent }
+  { path: 'admin-analytics', component: AdminDashboardComponent, canActivate:[AdminGuard] }
 ];
 
 @NgModule({

@@ -64,7 +64,7 @@ export class userController {
 
         @httpPost('/uploadImage/:userId', isLoggedInMiddleware, upload.single('content'))
         async uploadProfileImage(@request() req: any, @response() res: Response): Promise<void> {
-            try {
+            try {   
                 const { userId } = req.params
             const authenticatedUserId = req.user._id;
 

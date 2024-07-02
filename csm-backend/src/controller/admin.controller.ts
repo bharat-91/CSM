@@ -6,8 +6,8 @@ import { Request, Response } from "express";
 import { IUser } from "../interface";
 import { ErrorHandling } from "../utils/errorHelper";
 import { responseStatus, statusCode } from "../utils/statusResponse";
-import { getAllUsers } from "../utils/pipeline";
-import { User } from "../models";
+import { fileTypePer, getAllUsers, getMonthlyData } from "../utils/pipeline";
+import { Media, User } from "../models";
 import config from 'config';
 import jwt from 'jsonwebtoken'
 import { isAdmin } from "../middleware/authorization.middleware";
@@ -134,6 +134,103 @@ export class adminController{
             });
         }
     }
+    @httpGet('/admin/analytics')
+    async getMediaData(req: Request, res: Response): Promise<void> {
+        try {
+          const { page, limit, sort, searchKeyword, selectedMonth } = req.query;
+    
+          const pageNumber = parseInt(page as string) || 1;
+          const pageLimit = parseInt(limit as string) || 10;
+          const pageSort = (parseInt(sort as string) as 1 | -1) || 1;
+          const search: any = searchKeyword || '';
+    
+          if (!selectedMonth || typeof selectedMonth !== 'string') {
+            res.status(statusCode.BAD_REQUEST.code).json({
+              message: "Invalid or missing 'selectedMonth' parameter",
+              response: responseStatus.FAILED
+            });
+            return;
+          }
+    
+          const monthStartDate = new Date(selectedMonth);
+          const monthEndDate = new Date(new Date(selectedMonth).setMonth(monthStartDate.getMonth() + 1));
+    
+          const totalCountPipeline = [
+            {
+              $match: {
+                createAt: {
+                  $gte: monthStartDate,
+                  $lt: monthEndDate
+                },
+                ...(search ? { $text: { $search: search } } : {})
+              }
+            },
+            {
+              $count: "totalCount"
+            }
+          ];
+    
+          const dataPipeline = [
+            {
+              $match: {
+                createAt: {
+                  $gte: monthStartDate,
+                  $lt: monthEndDate
+                },
+                ...(search ? { $text: { $search: search } } : {})
+              }
+            },
+            {
+              $sort: { createAt: pageSort }
+            },
+            {
+              $skip: (pageNumber - 1) * pageLimit
+            },
+            {
+              $limit: pageLimit
+            },
+            {
+              $project: {
+                _id: 1,
+                userId: 1,
+                contentPath: 1,
+                createAt: 1,
+                updatedAt: 1,
+                status: 1,
+                title: 1,
+                description: 1,
+                filename: 1,
+                fileType: 1,
+                __v: 1
+              }
+            }
+          ];
+    
+          const [totalCountResult, data, fileTypePerResult] = await Promise.all([
+            Media.aggregate(totalCountPipeline),
+            Media.aggregate(dataPipeline),
+            fileTypePer()
+          ]);
+    
+          const totalCount = totalCountResult.length > 0 ? totalCountResult[0].totalCount : 0;
+    
+          res.status(statusCode.SUCCESS.code).json({
+            message: statusCode.SUCCESS.message,
+            details: data,
+            totalCount: totalCount,
+            fileTypeStats: fileTypePerResult,
+            response: responseStatus.SUCCESS
+          });
+        } catch (error: any) {
+          console.error('Error fetching media data:', error);
+          res.status(statusCode.INTERNAL_SERVER_ERROR.code).json({
+            message: statusCode.INTERNAL_SERVER_ERROR.message,
+            response: responseStatus.FAILED,
+            error: error.message
+          });
+        }
+    }
+    
 
     @httpDelete('/deleteUser/:userId', isAdmin)
     async deleteUser(@request() req:Request, @response() res:Response):Promise<void>{
